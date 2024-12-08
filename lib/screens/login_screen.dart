@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 backAction: () {
                   Navigator.pop(context, false);
                 },
-                title: 'Login',
+                title: 'Login Screen',
               ),
             ],
           ),
