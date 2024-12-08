@@ -1,6 +1,8 @@
 import 'package:ratemy/screens/presentation/login_presentation.dart';
+import 'package:ratemy/screens/presentation/profile_presentation.dart';
 
 import '../framework/api_service.dart';
+import '../screens/presentation/feed_presentation.dart';
 
 class Injector {
   static final Injector _instance = Injector._internal();
@@ -24,5 +26,13 @@ class Injector {
   // PRESENTATION
   LoginPresentation getLoginPresentation() {
     return LoginPresentation();
+  }
+
+  FeedPresentation getFeedPresentation() {
+    return FeedPresentation();
+  }
+
+  ProfilePresentation getProfilePresentation() {
+    return ProfilePresentation();
   }
 }

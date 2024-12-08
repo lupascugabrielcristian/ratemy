@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ratemy/screens/ProfileScreen.dart';
+import 'package:ratemy/screens/feed_screen.dart';
 import 'package:ratemy/screens/login_screen.dart';
 import 'package:ratemy/screens/presentation/app_theme.dart';
+import 'package:ratemy/screens/user_screen.dart';
 
 import 'application/injector.dart';
 
@@ -26,6 +29,9 @@ class MyApp extends StatelessWidget {
       initialRoute: initialRoute,
       routes: {
         LoginScreen.id: (context) => LoginScreen(presentation: injector.getLoginPresentation()),
+        FeedScreen.id: (context) => FeedScreen(presentation: injector.getFeedPresentation(),),
+        UserScreen.id: (context) => UserScreen(presentation: injector.getProfilePresentation(),),
+        ProfileScreen.id: (context) => ProfileScreen(presentation: injector.getProfilePresentation(),),
       },
       theme: AppTheme.getAppTheme(),
       onGenerateRoute: (settings) {
