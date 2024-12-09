@@ -7,6 +7,7 @@ import 'package:ratemy/screens/login_screen.dart';
 import 'package:ratemy/screens/presentation/app_theme.dart';
 import 'package:ratemy/screens/user_screen.dart';
 
+import 'application/entity/user.dart';
 import 'application/injector.dart';
 
 void main() {
@@ -32,12 +33,19 @@ class MyApp extends StatelessWidget {
       initialRoute: initialRoute,
       routes: {
         LoginScreen.id: (context) => LoginScreen(presentation: injector.getLoginPresentation()),
-        FeedScreen.id: (context) => FeedScreen(presentation: injector.getFeedPresentation(),),
         UserScreen.id: (context) => UserScreen(presentation: injector.getProfilePresentation(),),
         ProfileScreen.id: (context) => ProfileScreen(presentation: injector.getProfilePresentation(),),
       },
       theme: AppTheme.getAppTheme(),
       onGenerateRoute: (settings) {
+        // All Routes definitions that require parameters
+        if(settings.name == FeedScreen.id) {
+          const user = User(name: 'Andrei', profileImage: 'assets/example_profile_image.jpeg');
+          return MaterialPageRoute(builder: (context) {
+            return FeedScreen(presentation: injector.getFeedPresentation(), user: user,);
+          });
+        }
+
         return MaterialPageRoute(builder: (context) {
           return LoginScreen(presentation: injector.getLoginPresentation());
         });

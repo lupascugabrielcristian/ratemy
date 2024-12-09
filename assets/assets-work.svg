@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb, 2024-10-09)"
+   sodipodi:docname="assets-work.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.6192194"
+     inkscape:cx="629.01776"
+     inkscape:cy="797.77862"
+     inkscape:window-width="3068"
+     inkscape:window-height="1269"
+     inkscape:window-x="1920"
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <rect
+       x="191.84467"
+       y="167.86408"
+       width="58.238559"
+       height="67.37402"
+       id="rect1" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#f9f9f9;fill-opacity:1;stroke-width:2.86499;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
+       id="path1"
+       cx="105"
+       cy="148.5"
+       r="41.392677" />
+    <text
+       xml:space="preserve"
+       transform="matrix(1.8475582,0,0,1.8475582,-271.20812,-205.48089)"
+       id="text1"
+       style="font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1)"><tspan
+         x="191.84375"
+         y="203.25391"
+         id="tspan3"><tspan
+           style="font-weight:bold;font-family:'Tlwg Typo';-inkscape-font-specification:'Tlwg Typo, Bold'"
+           id="tspan2">R</tspan></tspan></text>
+  </g>
+</svg>

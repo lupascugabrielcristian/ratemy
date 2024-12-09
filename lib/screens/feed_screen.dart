@@ -1,15 +1,18 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ratemy/application/entity/user.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 import 'components/bottom_bar.dart';
 
 class FeedScreen extends StatefulWidget {
   final FeedPresentation presentation;
+  final User user;
 
-  const FeedScreen({super.key, required this.presentation});
+  const FeedScreen({super.key, required this.presentation, required this.user});
 
   static String id = 'feed_screen';
 
@@ -18,7 +21,18 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  String imageUrl = 'https://picsum.photos/id/${Random().nextInt(1000)}/800/800';
+  final double profileImageSize = 70;
+  final List<String> previousImages = ['https://picsum.photos/id/${Random().nextInt(1000)}/800/800'];
+  String imageUrl = '';
+  bool loading = false;
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      imageUrl = previousImages.last;
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +43,6 @@ class _FeedScreenState extends State<FeedScreen> {
 
         children: [
           widget.presentation.gapAboveScreenTitle,
-
-
 
           Expanded(
             child: Column(
@@ -49,6 +61,9 @@ class _FeedScreenState extends State<FeedScreen> {
 
                 _buildToolsRow(),
 
+                const SizedBox(height: 20,),
+
+                _buildProfileRow(),
               ],
             ),
           ),
@@ -65,10 +80,17 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _buildImage(String src) {
     return GestureDetector(
-      onTap: () {
-         setState(() {
-           imageUrl = 'https://picsum.photos/id/${Random().nextInt(1000)}/800/800';
-         });
+      onVerticalDragEnd: (details) {
+        if (details.primaryVelocity != null) {
+          if (details.primaryVelocity! < -50 && details.localPosition.dy < 200) {
+            loading = true;
+            _showNext();
+          }
+
+          if (details.primaryVelocity! > 50 && details.localPosition.dy > 200) {
+            _showPrevious();
+          }
+        }
       },
       child: Image.network(
         src,
@@ -79,9 +101,9 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Widget _buildLineSeparator() {
+  Widget _buildLineSeparator([double margins = 10.0]) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: margins),
       child: Container(
         height: 1,
         decoration: const BoxDecoration(
@@ -113,6 +135,9 @@ class _FeedScreenState extends State<FeedScreen> {
     if (loadingProgress == null) {
       return child;
     }
+
+    loading = false;
+
     return Container(
       color: widget.presentation.secondary,
       height: w,
@@ -132,14 +157,16 @@ class _FeedScreenState extends State<FeedScreen> {
         padding: const EdgeInsets.only(right: 10.0, left: 20.0),
         child: Row(
           children: [
-            Expanded(child: const Text('RATE MY', style: TextStyle(color: Colors.white))),
+            const Expanded(child: Text('RATE MY', style: TextStyle(color: Colors.white))),
 
             IconButton(
+              padding: EdgeInsets.zero,
               onPressed: () {},
               iconSize: 30,
               icon: const Icon(Icons.search), color: widget.presentation.primary,),
 
             IconButton(
+              padding: EdgeInsets.zero,
               onPressed: () {},
               iconSize: 30,
               icon: const Icon(Icons.send), color: widget.presentation.secondary,)
@@ -148,9 +175,9 @@ class _FeedScreenState extends State<FeedScreen> {
       );
   }
 
-  _buildToolsRow() {
+  Widget _buildToolsRow() {
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0, left: 20.0),
+      padding: const EdgeInsets.only(right: 20.0, left: 10.0),
       child: Row(
         children: [
           IconButton(
@@ -182,5 +209,38 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildProfileRow() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20.0, left: 20.0),
+      child: Row(
+        children: [
+          Image.asset(
+            widget.user.profileImage,
+            width: profileImageSize,
+            height: profileImageSize,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showNext() {
+    dev.log('show next', name: 'FEED');
+
+    previousImages.add('https://picsum.photos/id/${Random().nextInt(1000)}/800/800');
+    setState(() {
+      imageUrl = previousImages.last;
+    });
+  }
+
+  void _showPrevious() {
+    dev.log('show previous', name: 'FEED');
+
+    previousImages.removeLast();
+    setState(() {
+      imageUrl = previousImages.last;
+    });
   }
 }
