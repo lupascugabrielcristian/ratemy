@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/ProfileScreen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
@@ -8,6 +10,7 @@ import 'package:ratemy/screens/user_screen.dart';
 import 'application/injector.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
 
@@ -40,5 +43,14 @@ class MyApp extends StatelessWidget {
         });
       },
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides{
+
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
