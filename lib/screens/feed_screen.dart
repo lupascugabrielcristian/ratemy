@@ -7,6 +7,7 @@ import 'package:ratemy/screens/components/rate_button.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 import 'components/bottom_bar.dart';
+import 'components/current_grade.dart';
 
 class FeedScreen extends StatefulWidget {
   final FeedPresentation presentation;
@@ -246,44 +247,19 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   void _showNext() {
-    dev.log('show next', name: 'FEED');
-
     previousImages.add('https://picsum.photos/id/${Random().nextInt(1000)}/800/800');
     setState(() {
       imageUrl = previousImages.last;
+      currentGrade = -1;
     });
   }
 
   void _showPrevious() {
-    dev.log('show previous', name: 'FEED');
-
     previousImages.removeLast();
     setState(() {
       imageUrl = previousImages.last;
+      currentGrade = -1;
     });
   }
 }
 
-class CurrentGrade extends StatelessWidget {
-  final int grade;
-
-  const CurrentGrade({super.key, required this.grade});
-
-  @override
-  Widget build(BuildContext context) {
-    if (grade > 0) {
-      return Container(
-        color: Colors.lightGreen,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(grade.toString(), style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),),
-          ),
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
-  }
-
-}
