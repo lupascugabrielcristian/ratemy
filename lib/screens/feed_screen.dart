@@ -2,8 +2,8 @@ import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:ratemy/application/entity/user.dart';
+import 'package:ratemy/screens/components/rate_button.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 import 'components/bottom_bar.dart';
@@ -25,6 +25,7 @@ class _FeedScreenState extends State<FeedScreen> {
   final List<String> previousImages = ['https://picsum.photos/id/${Random().nextInt(1000)}/800/800'];
   String imageUrl = '';
   bool loading = false;
+  int currentGrade = -1;
 
   @override
   void didChangeDependencies() {
@@ -45,25 +46,47 @@ class _FeedScreenState extends State<FeedScreen> {
           widget.presentation.gapAboveScreenTitle,
 
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Stack(
               children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
 
-                _buildTopSearchBar(),
+                    _buildTopSearchBar(),
 
-                _buildLineSeparator(),
+                    _buildLineSeparator(),
 
-                const SizedBox(height: 40,),
+                    const SizedBox(height: 40,),
 
-                _buildImage(imageUrl),
+                    _buildImage(imageUrl),
 
-                const SizedBox(height: 40,),
+                    const SizedBox(height: 40,),
 
-                _buildToolsRow(),
+                    _buildToolsRow(),
 
-                const SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
 
-                _buildProfileRow(),
+                    _buildProfileRow(),
+                  ],
+                ),
+
+                Positioned(
+                  bottom: 100,
+                  right: 20,
+                  child: RateButton(
+                    saveGrade: (grade) {
+                      setState(() {
+                        currentGrade = grade;
+                      });
+                    },
+                  ),
+                ),
+
+                Positioned(
+                  top: 130,
+                  left: 20,
+                  child: CurrentGrade(grade: currentGrade)
+                ),
               ],
             ),
           ),
@@ -201,11 +224,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
           const Spacer(),
 
-          SvgPicture.asset(
-              height: 70,
-              'assets/rate_btn.svg'
-          ),
-
+          // const RateButton(),
         ],
       ),
     );
@@ -243,4 +262,28 @@ class _FeedScreenState extends State<FeedScreen> {
       imageUrl = previousImages.last;
     });
   }
+}
+
+class CurrentGrade extends StatelessWidget {
+  final int grade;
+
+  const CurrentGrade({super.key, required this.grade});
+
+  @override
+  Widget build(BuildContext context) {
+    if (grade > 0) {
+      return Container(
+        color: Colors.lightGreen,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(grade.toString(), style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),),
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
 }
