@@ -20,6 +20,9 @@ class _RateButtonState extends State<RateButton> {
   @override
   Widget build(BuildContext context) {
 
+    final widgetWidth = MediaQuery.sizeOf(context).width * .13;
+    log('widget width = $widgetWidth', name: 'RATE BTN');
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -53,25 +56,25 @@ class _RateButtonState extends State<RateButton> {
           });
         }
 
-        if (details.localPosition.dy < -100 ) {
+        if (details.localPosition.dy < -1 * (2 * widgetWidth - widgetWidth * 0.2) ) {
           setState(() {
             selectedGrade = 2;
           });
         }
 
-        if (details.localPosition.dy < -140 ) {
+        if (details.localPosition.dy < -1 * (3 * widgetWidth) ) {
           setState(() {
             selectedGrade = 3;
           });
         }
 
-        if (details.localPosition.dy < -240 ) {
+        if (details.localPosition.dy < -1 * (4 * widgetWidth)  ) { // 240
           setState(() {
             selectedGrade = 4;
           });
         }
 
-        if (details.localPosition.dy < -330 ) {
+        if (details.localPosition.dy < -1 * (5 * widgetWidth + 20) ) {
           setState(() {
             selectedGrade = 5;
           });
@@ -80,14 +83,14 @@ class _RateButtonState extends State<RateButton> {
       child: Container(
         key: _rateContainerKey,
         decoration: const BoxDecoration(
-          color: Colors.grey, // Background color of the container
+          color: Color.fromARGB(152, 120, 120, 120), // Background color of the column
           borderRadius: BorderRadius.all(Radius.circular(70)),
         ),
         child: Column(
           children: [
-            _grades(),
+            _grades(widgetWidth),
             SvgPicture.asset(
-              width: 70,
+              width: widgetWidth,
               'assets/rate_btn.svg'
             ),
           ],
@@ -96,21 +99,21 @@ class _RateButtonState extends State<RateButton> {
     );
   }
 
-  Widget _grades() {
+  Widget _grades(double width) {
     const double margin = 10;
 
     if (showGrades) {
       return Column(
         children: [
-          _grade(5, selectedGrade >= 5),
+          _grade(5, selectedGrade >= 5, width),
           const SizedBox(height: margin,),
-          _grade(4, selectedGrade >= 4),
+          _grade(4, selectedGrade >= 4, width),
           const SizedBox(height: margin,),
-          _grade(3, selectedGrade >= 3),
+          _grade(3, selectedGrade >= 3, width),
           const SizedBox(height: margin,),
-          _grade(2, selectedGrade >= 2),
+          _grade(2, selectedGrade >= 2, width),
           const SizedBox(height: margin,),
-          _grade(1, selectedGrade >= 1),
+          _grade(1, selectedGrade >= 1, width),
           const SizedBox(height: margin,),
         ],
       );
@@ -119,12 +122,12 @@ class _RateButtonState extends State<RateButton> {
     }
   }
 
-  _grade(int no, bool selected) {
+  _grade(int no, bool selected, double widgetWidth) {
     return Container(
-      height: 70,
-      width: 70,
+      height: widgetWidth,
+      width: widgetWidth,
       decoration: BoxDecoration(
-        color: selected ? Colors.white : Colors.green, // Background color of the container
+        color: selected ? Colors.green : const Color.fromARGB(255, 225, 225, 225), // Background color of the container
         shape: BoxShape.circle, // Makes the container circular
       ),
       child: Center(child: Text(no.toString(), style: const TextStyle(fontSize: 20, color: Colors.black),)),

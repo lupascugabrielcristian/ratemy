@@ -38,6 +38,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final spaceSm = MediaQuery.sizeOf(context).height * .03;
+
     return Scaffold(
       backgroundColor: widget.presentation.background,
       body: Column(
@@ -53,19 +55,25 @@ class _FeedScreenState extends State<FeedScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
 
-                    _buildTopSearchBar(),
+                    ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.sizeOf(context).height * 0.045,
+                        ),
+                        child: _buildTopSearchBar(),
+                    ),
+
 
                     _buildLineSeparator(),
 
-                    const SizedBox(height: 40,),
+                    SizedBox(height: spaceSm),
 
                     _buildImage(imageUrl),
 
-                    const SizedBox(height: 40,),
+                    SizedBox(height: spaceSm,),
 
                     _buildToolsRow(),
 
-                    const SizedBox(height: 20,),
+                    SizedBox(height: spaceSm,),
 
                     _buildProfileRow(),
                   ],
@@ -202,31 +210,34 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget _buildToolsRow() {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, left: 10.0),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () {},
-            iconSize: 40,
-            icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: 50
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              // iconSize: 40,
+              icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
 
-          const SizedBox(width: 10,),
+            const SizedBox(width: 10,),
 
-          IconButton(
-            onPressed: () {},
-            iconSize: 40,
-            icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
+            IconButton(
+              onPressed: () {},
+              // iconSize: 40,
+              icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
 
-          const SizedBox(width: 10,),
+            const SizedBox(width: 10,),
 
-          IconButton(
-            onPressed: () {},
-            iconSize: 40,
-            icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
+            IconButton(
+              onPressed: () {},
+              // iconSize: 40,
+              icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
 
-          const Spacer(),
-
-          // const RateButton(),
-        ],
+            // const RateButton(),
+          ],
+        ),
       ),
     );
   }
