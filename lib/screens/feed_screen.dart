@@ -33,12 +33,16 @@ class _FeedScreenState extends State<FeedScreen> {
     setState(() {
       imageUrl = previousImages.last;
     });
+
+
+
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final spaceSm = MediaQuery.sizeOf(context).height * .03;
+    final spaceSm = MediaQuery.sizeOf(context).height * .02;
+    final topPositionRateBtn = MediaQuery.sizeOf(context).height * .12;
 
     return Scaffold(
       backgroundColor: widget.presentation.background,
@@ -55,13 +59,12 @@ class _FeedScreenState extends State<FeedScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
 
-                    ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.sizeOf(context).height * 0.045,
-                        ),
+                    Flexible(
+                      child: FractionallySizedBox(
+                        heightFactor: 0.4,
                         child: _buildTopSearchBar(),
+                      ),
                     ),
-
 
                     _buildLineSeparator(),
 
@@ -69,18 +72,29 @@ class _FeedScreenState extends State<FeedScreen> {
 
                     _buildImage(imageUrl),
 
-                    SizedBox(height: spaceSm,),
+                    // SizedBox(height: spaceSm,),
 
-                    _buildToolsRow(),
+                    Flexible(
+                      child: FractionallySizedBox(
+                        heightFactor: 0.6,
+                        child: _buildToolsRow(),
+                      ),
+                    ),
 
-                    SizedBox(height: spaceSm,),
+                    // SizedBox(height: spaceSm,),
 
-                    _buildProfileRow(),
+                    Flexible(
+                      child: FractionallySizedBox(
+                        heightFactor: 0.7,
+                        child: _buildProfileRow(),
+                      ),
+                    ),
+
                   ],
                 ),
 
                 Positioned(
-                  bottom: 100,
+                  bottom: topPositionRateBtn,
                   right: 20,
                   child: RateButton(
                     saveGrade: (grade) {
@@ -110,6 +124,7 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
+
   Widget _buildImage(String src) {
     return GestureDetector(
       onVerticalDragEnd: (details) {
@@ -124,13 +139,31 @@ class _FeedScreenState extends State<FeedScreen> {
           }
         }
       },
-      child: Image.network(
+      child: _sizedImage(src),
+    );
+  }
+
+  Widget _sizedImage(String src) {
+    if (MediaQuery.sizeOf(context).height < 600) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight:  MediaQuery.sizeOf(context).height * .45,
+        ),
+        child: Image.network(
+          src,
+          gaplessPlayback: true,
+          errorBuilder: onError,
+          loadingBuilder: onLoading,
+        ),
+      );
+    } else {
+      return Image.network(
         src,
         gaplessPlayback: true,
         errorBuilder: onError,
         loadingBuilder: onLoading,
-      ),
-    );
+      );
+    }
   }
 
   Widget _buildLineSeparator([double margins = 10.0]) {
@@ -194,13 +227,13 @@ class _FeedScreenState extends State<FeedScreen> {
             IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {},
-              iconSize: 30,
+              // iconSize: 30,
               icon: const Icon(Icons.search), color: widget.presentation.primary,),
 
             IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {},
-              iconSize: 30,
+              // iconSize: 30,
               icon: const Icon(Icons.send), color: widget.presentation.secondary,)
           ],
         ),
@@ -210,34 +243,29 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget _buildToolsRow() {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, left: 10.0),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: 50
-        ),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () {},
-              // iconSize: 40,
-              icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {},
+            // iconSize: 40,
+            icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
 
-            const SizedBox(width: 10,),
+          const SizedBox(width: 10,),
 
-            IconButton(
-              onPressed: () {},
-              // iconSize: 40,
-              icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
+          IconButton(
+            onPressed: () {},
+            // iconSize: 40,
+            icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
 
-            const SizedBox(width: 10,),
+          const SizedBox(width: 10,),
 
-            IconButton(
-              onPressed: () {},
-              // iconSize: 40,
-              icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
+          IconButton(
+            onPressed: () {},
+            // iconSize: 40,
+            icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
 
-            // const RateButton(),
-          ],
-        ),
+          // const RateButton(),
+        ],
       ),
     );
   }
@@ -248,6 +276,7 @@ class _FeedScreenState extends State<FeedScreen> {
       child: Row(
         children: [
           Image.asset(
+            alignment: Alignment.centerLeft,
             widget.user.profileImage,
             width: profileImageSize,
             height: profileImageSize,
