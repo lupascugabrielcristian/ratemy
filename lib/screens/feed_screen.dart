@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:ratemy/screens/components/rate_button.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 import 'components/bottom_bar.dart';
-import 'components/current_grade.dart';
+import 'components/grade_star.dart';
 
 class FeedScreen extends StatefulWidget {
   final FeedPresentation presentation;
@@ -22,11 +21,30 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+  final GlobalKey _toolContainerKey = GlobalKey();
+  double rateButtonWidth = 0;
+  double bottomPositionRateBtn = 100;
   final double profileImageSize = 70;
   final List<String> previousImages = ['https://picsum.photos/id/${Random().nextInt(1000)}/800/800'];
   String imageUrl = '';
   bool loading = false;
-  int currentGrade = -1;
+  double currentGrade = -1;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
+      final Offset position = renderBox.localToGlobal(Offset.zero);
+
+      rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
+
+      setState(() {
+        bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
+      });
+    });
+    super.initState();
+  }
+
 
   @override
   void didChangeDependencies() {
@@ -34,17 +52,11 @@ class _FeedScreenState extends State<FeedScreen> {
       imageUrl = previousImages.last;
     });
 
-
-
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final spaceSm = MediaQuery.sizeOf(context).height * .02;
-    final topPositionRateBtn = MediaQuery.sizeOf(context).height * .12;
-
-
     final sW = MediaQuery.sizeOf(context).width;
     final sH = MediaQuery.sizeOf(context).height;
     final double searchBarH = sW * .2 > 50 ? 50 : sW * .2;
@@ -53,80 +65,90 @@ class _FeedScreenState extends State<FeedScreen> {
 
     return Scaffold(
       backgroundColor: widget.presentation.background,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
+      body: Stack(
         children: [
-          widget.presentation.gapAboveScreenTitle,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          Expanded(
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widget.presentation.gapAboveScreenTitle,
+
+              // TOP BAR
+              SizedBox(
+                height: searchBarH,
+                child: _buildTopSearchBar(),
+              ),
+
+              _buildLineSeparator(),
+
+              SizedBox(height: 20 * scalingFactor,),
+
+              Expanded(
+                child: Column(
                   children: [
 
+                    // IMAGE
                     Flexible(
                       child: FractionallySizedBox(
-                        heightFactor: 0.4,
-                        child: _buildTopSearchBar(),
+                        child: SizedBox(
+                          width: sW,
+                          height: sW,
+                          child: _buildImage(imageUrl),
+                        ),
                       ),
                     ),
 
-                    _buildLineSeparator(),
+                    SizedBox(height: 20 * scalingFactor,),
 
-                    SizedBox(height: spaceSm),
-
-                    _buildImage(imageUrl),
-
-                    // SizedBox(height: spaceSm,),
-
-                    Flexible(
-                      child: FractionallySizedBox(
-                        heightFactor: 0.6,
-                        child: _buildToolsRow(),
+                    // TOOLS BUTTONS
+                    SizedBox(
+                      key: _toolContainerKey,
+                      height: 50,
+                      child: Center(
+                        child: _buildToolsRow(scalingFactor - 0.2),
                       ),
                     ),
 
-                    // SizedBox(height: spaceSm,),
-
-                    Flexible(
-                      child: FractionallySizedBox(
-                        heightFactor: 0.7,
-                        child: _buildProfileRow(),
-                      ),
+                    // PROFILE IMAGE
+                    SizedBox(
+                      height: 100,
+                      child: _buildProfileRow(profileImageSize),
                     ),
-
                   ],
                 ),
+              ),
 
-                Positioned(
-                  bottom: topPositionRateBtn,
-                  right: 20,
-                  child: RateButton(
-                    width: 23,
-                    saveGrade: (grade) {
-                      setState(() {
-                        currentGrade = grade;
-                      });
-                    },
-                  ),
-                ),
+              _buildLineSeparator(),
 
-                Positioned(
-                  top: 130,
-                  left: 20,
-                  child: CurrentGrade(grade: currentGrade)
-                ),
-              ],
+              SizedBox(
+                height: bottomBarH,
+                child: BottomBar(scaling: scalingFactor,),
+              ),
+            ],
+          ),
+
+
+          // RATE BUTTON
+          Positioned(
+            bottom: bottomPositionRateBtn,
+            right: 20,
+            child: RateButton(
+              width: rateButtonWidth,
+              saveGrade: (grade) {
+                setState(() {
+                  currentGrade = grade * 1.0;
+                });
+              },
             ),
           ),
 
-          _buildLineSeparator(),
 
-          const BottomBar(),
-
-          const SizedBox(height: 10,),
+          // CURRENT GRADE
+          Positioned(
+              top: 130,
+              left: 15,
+              child: GradeStar(grade: currentGrade, width: 70)
+          ),
         ],
       ),
     );
@@ -147,34 +169,16 @@ class _FeedScreenState extends State<FeedScreen> {
           }
         }
       },
-      child: _sizedImage(src),
-    );
-  }
-
-  Widget _sizedImage(String src) {
-    if (MediaQuery.sizeOf(context).height < 600) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight:  MediaQuery.sizeOf(context).height * .45,
-        ),
-        child: Image.network(
+      child: Image.network(
           src,
           gaplessPlayback: true,
           errorBuilder: onError,
           loadingBuilder: onLoading,
         ),
-      );
-    } else {
-      return Image.network(
-        src,
-        gaplessPlayback: true,
-        errorBuilder: onError,
-        loadingBuilder: onLoading,
-      );
-    }
+    );
   }
 
-  Widget _buildLineSeparator([double margins = 10.0]) {
+  Widget _buildLineSeparator([double margins = 0.0]) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: margins),
       child: Container(
@@ -235,41 +239,39 @@ class _FeedScreenState extends State<FeedScreen> {
             IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {},
-              // iconSize: 30,
               icon: const Icon(Icons.search), color: widget.presentation.primary,),
 
             IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {},
-              // iconSize: 30,
               icon: const Icon(Icons.send), color: widget.presentation.secondary,)
           ],
         ),
       );
   }
 
-  Widget _buildToolsRow() {
+  Widget _buildToolsRow(double scalingFactor) {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, left: 10.0),
       child: Row(
         children: [
           IconButton(
             onPressed: () {},
-            iconSize: 40,
+            iconSize: 40 * scalingFactor,
             icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
 
           const SizedBox(width: 10,),
 
           IconButton(
             onPressed: () {},
-            iconSize: 40,
+            iconSize: 40 * scalingFactor,
             icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
 
           const SizedBox(width: 10,),
 
           IconButton(
             onPressed: () {},
-            iconSize: 40,
+            iconSize: 40 * scalingFactor,
             icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
 
           // const RateButton(),
@@ -278,7 +280,7 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  Widget _buildProfileRow() {
+  Widget _buildProfileRow(double profileImageSize) {
     return Padding(
       padding: const EdgeInsets.only(right: 20.0, left: 20.0),
       child: Row(

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ratemy/screens/ProfileScreen.dart';
+import 'package:ratemy/screens/profile_screen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
 import 'package:ratemy/screens/login_screen.dart';
 import 'package:ratemy/screens/presentation/app_theme.dart';

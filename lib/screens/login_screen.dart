@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/presentation/login_presentation.dart';
-import 'package:ratemy/screens/screen_test.dart';
 
 import 'components/title_row.dart';
 import 'feed_screen.dart';
@@ -62,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   child: const Text('Get Started', style: TextStyle(fontSize: 20)),
                   onPressed: (){
-                    Navigator.pushNamed(context, TestScreen.id);
+                    Navigator.pushNamed(context, FeedScreen.id);
                   }
                 ),
               ],
