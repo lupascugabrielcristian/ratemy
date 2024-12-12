@@ -19,7 +19,9 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   final GlobalKey _toolContainerKey = GlobalKey();
-  double topPositionRateBtn = 0;
+  double rateButtonWidth = 0;
+  double bottomPositionRateBtn = 100;
+
 
 
   @override
@@ -27,11 +29,13 @@ class _TestScreenState extends State<TestScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
       final Offset position = renderBox.localToGlobal(Offset.zero);
-
       log('Position obtained: ${position.dy}');
 
+      rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
+      log('widget width = $rateButtonWidth', name: 'RATE BTN');
+
       setState(() {
-        topPositionRateBtn = position.dy;
+        bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
       });
     });
     super.initState();
@@ -129,10 +133,11 @@ class _TestScreenState extends State<TestScreen> {
 
           // RATE BUTTON
           Positioned(
-            top: topPositionRateBtn,
+            bottom: bottomPositionRateBtn,
             right: 20,
             child: RateButton(
-              saveGrade: (grade) {
+                width: rateButtonWidth,
+                saveGrade: (grade) {
               },
             ),
           ),

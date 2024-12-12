@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RateButton extends StatefulWidget {
-  const RateButton({super.key, required this.saveGrade});
+  const RateButton({super.key, required this.saveGrade, required this.width});
 
   final Function(int) saveGrade;
+  final double width;
 
   @override
   State<RateButton> createState() => _RateButtonState();
@@ -20,8 +21,6 @@ class _RateButtonState extends State<RateButton> {
   @override
   Widget build(BuildContext context) {
 
-    final widgetWidth = MediaQuery.sizeOf(context).width * .13;
-    log('widget width = $widgetWidth', name: 'RATE BTN');
 
     return GestureDetector(
       onTap: () {
@@ -56,25 +55,25 @@ class _RateButtonState extends State<RateButton> {
           });
         }
 
-        if (details.localPosition.dy < -1 * (2 * widgetWidth - widgetWidth * 0.2) ) {
+        if (details.localPosition.dy < -1 * (2 * widget.width - widget.width * 0.2) ) {
           setState(() {
             selectedGrade = 2;
           });
         }
 
-        if (details.localPosition.dy < -1 * (3 * widgetWidth) ) {
+        if (details.localPosition.dy < -1 * (3 * widget.width) ) {
           setState(() {
             selectedGrade = 3;
           });
         }
 
-        if (details.localPosition.dy < -1 * (4 * widgetWidth)  ) { // 240
+        if (details.localPosition.dy < -1 * (4 * widget.width)  ) { // 240
           setState(() {
             selectedGrade = 4;
           });
         }
 
-        if (details.localPosition.dy < -1 * (5 * widgetWidth + 20) ) {
+        if (details.localPosition.dy < -1 * (5 * widget.width + 20) ) {
           setState(() {
             selectedGrade = 5;
           });
@@ -88,9 +87,9 @@ class _RateButtonState extends State<RateButton> {
         ),
         child: Column(
           children: [
-            _grades(widgetWidth),
+            _grades(widget.width),
             SvgPicture.asset(
-              width: widgetWidth,
+              width: widget.width,
               'assets/rate_btn.svg'
             ),
           ],

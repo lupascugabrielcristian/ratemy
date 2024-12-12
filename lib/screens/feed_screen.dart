@@ -104,6 +104,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   bottom: topPositionRateBtn,
                   right: 20,
                   child: RateButton(
+                    width: 23,
                     saveGrade: (grade) {
                       setState(() {
                         currentGrade = grade;
