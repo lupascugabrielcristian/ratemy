@@ -291,6 +291,8 @@ class _FeedScreenState extends State<FeedScreen> {
             width: profileImageSize,
             height: profileImageSize,
           ),
+          const SizedBox(width: 10),
+          Text(widget.user.name, style: const TextStyle(color: Color.fromARGB(255, 225, 225, 225), fontSize: 18,))
         ],
       ),
     );
