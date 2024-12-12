@@ -5,6 +5,7 @@ import 'package:ratemy/screens/ProfileScreen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
 import 'package:ratemy/screens/login_screen.dart';
 import 'package:ratemy/screens/presentation/app_theme.dart';
+import 'package:ratemy/screens/screen_test.dart';
 import 'package:ratemy/screens/user_screen.dart';
 
 import 'application/entity/user.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(presentation: injector.getLoginPresentation()),
         UserScreen.id: (context) => UserScreen(presentation: injector.getProfilePresentation(),),
         ProfileScreen.id: (context) => ProfileScreen(presentation: injector.getProfilePresentation(),),
+        TestScreen.id: (context) => TestScreen(presentation: injector.getFeedPresentation(),),
       },
       theme: AppTheme.getAppTheme(),
       onGenerateRoute: (settings) {
