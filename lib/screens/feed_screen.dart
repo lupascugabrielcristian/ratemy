@@ -44,6 +44,13 @@ class _FeedScreenState extends State<FeedScreen> {
     final spaceSm = MediaQuery.sizeOf(context).height * .02;
     final topPositionRateBtn = MediaQuery.sizeOf(context).height * .12;
 
+
+    final sW = MediaQuery.sizeOf(context).width;
+    final sH = MediaQuery.sizeOf(context).height;
+    final double searchBarH = sW * .2 > 50 ? 50 : sW * .2;
+    final double bottomBarH = sW * .3 > 60 ? 60 : sW * .3;
+    final double scalingFactor = sH > 700 ? 1 : sH / 700;
+
     return Scaffold(
       backgroundColor: widget.presentation.background,
       body: Column(
@@ -247,21 +254,21 @@ class _FeedScreenState extends State<FeedScreen> {
         children: [
           IconButton(
             onPressed: () {},
-            // iconSize: 40,
+            iconSize: 40,
             icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
 
           const SizedBox(width: 10,),
 
           IconButton(
             onPressed: () {},
-            // iconSize: 40,
+            iconSize: 40,
             icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
 
           const SizedBox(width: 10,),
 
           IconButton(
             onPressed: () {},
-            // iconSize: 40,
+            iconSize: 40,
             icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
 
           // const RateButton(),
