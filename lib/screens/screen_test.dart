@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/components/bottom_bar.dart';
+import 'package:ratemy/screens/components/grade_star.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 import 'components/rate_button.dart';
@@ -73,7 +74,8 @@ class _TestScreenState extends State<TestScreen> {
                 color: Colors.green,
                 height: searchBarH,
                 child: Center(
-                  child: Text('Search bar')
+                  // child: Text('Search bar')
+                  child: _buildTopSearchBar(),
                 ),
               ),
 
@@ -141,6 +143,14 @@ class _TestScreenState extends State<TestScreen> {
               },
             ),
           ),
+
+
+          // CURRENT GRADE
+          const Positioned(
+              top: 130,
+              left: 15,
+              child: GradeStar(grade: 2, width: 70)
+          ),
         ],
       ),
     );
@@ -173,6 +183,29 @@ class _TestScreenState extends State<TestScreen> {
             icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
 
           // const RateButton(),
+        ],
+      ),
+    );
+  }
+
+  _buildTopSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10.0, left: 20.0),
+      child: Row(
+        children: [
+          const Expanded(child: Text('RATE MY', style: TextStyle(color: Colors.white))),
+
+          IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {},
+            // iconSize: 30,
+            icon: const Icon(Icons.search), color: widget.presentation.primary,),
+
+          IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {},
+            // iconSize: 30,
+            icon: const Icon(Icons.send), color: widget.presentation.secondary,)
         ],
       ),
     );
