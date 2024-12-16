@@ -2,10 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/components/bottom_bar.dart';
-import 'package:ratemy/screens/components/grade_star.dart';
+import 'package:ratemy/screens/components/post_widget.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
-import 'components/rate_button.dart';
 
 class TestScreen extends StatefulWidget {
   final FeedPresentation presentation;
@@ -49,15 +48,11 @@ class _TestScreenState extends State<TestScreen> {
     final sW = MediaQuery.sizeOf(context).width;
     final sH = MediaQuery.sizeOf(context).height;
     log('sH = $sH', name: 'TEST');
-    // final searchBarH = sW * .1;
     final double searchBarH = sW * .2 > 50 ? 50 : sW * .2;
-    // const double bottomBarH = 80;
     final double bottomBarH = sW * .3 > 60 ? 60 : sW * .3;
     log('bottomBarH = $bottomBarH', name: 'TEST');
     final double scalingFactor = sH > 700 ? 1 : sH / 700;
     log('scaling factor = $scalingFactor', name: 'TEST');
-    // topPositionRateBtn = MediaQuery.sizeOf(context).height * .12;
-    // log('rate button pos = $topPositionRateBtn', name: 'TEST');
 
 
     return Scaffold(
@@ -79,44 +74,16 @@ class _TestScreenState extends State<TestScreen> {
                 ),
               ),
 
-              SizedBox(height: 20 * scalingFactor,),
+              // Expanded(
+              //   child: PostWidget(presentation: widget.presentation),
+              // ),
               Expanded(
-                child: Column(
+                child: PageView(
+                  scrollDirection: Axis.vertical,
                   children: [
-
-                    Flexible(
-                      child: FractionallySizedBox(
-                        // heightFactor: 0.7,
-                        child: Container(
-                          width: sW,
-                          height: sW,
-                          color: Colors.blue,
-                          child: Center(
-                              child: Text('Image')
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 20 * scalingFactor,),
-
-                    Container(
-                      key: _toolContainerKey,
-                      color: Colors.lightBlueAccent,
-                      height: 50,
-                      child: Center(
-                          // child: Text('Tools')
-                        child: _buildToolsRow(scalingFactor - 0.2),
-                      ),
-                    ),
-
-                    Container(
-                      color: Colors.red,
-                      height: 100,
-                      child: Center(
-                          child: Text('Profile')
-                      ),
-                    ),
+                    PostWidget(presentation: widget.presentation),
+                    PostWidget(presentation: widget.presentation),
+                    PostWidget(presentation: widget.presentation),
                   ],
                 ),
               ),
@@ -130,26 +97,6 @@ class _TestScreenState extends State<TestScreen> {
                 child: BottomBar(scaling: scalingFactor,),
               ),
             ],
-          ),
-
-
-          // RATE BUTTON
-          Positioned(
-            bottom: bottomPositionRateBtn,
-            right: 20,
-            child: RateButton(
-                width: rateButtonWidth,
-                saveGrade: (grade) {
-              },
-            ),
-          ),
-
-
-          // CURRENT GRADE
-          const Positioned(
-              top: 130,
-              left: 15,
-              child: GradeStar(grade: 2, width: 70)
           ),
         ],
       ),

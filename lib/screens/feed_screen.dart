@@ -81,11 +81,12 @@ class _FeedScreenState extends State<FeedScreen> {
 
               _buildLineSeparator(),
 
-              SizedBox(height: 20 * scalingFactor,),
 
               Expanded(
                 child: Column(
                   children: [
+
+                    SizedBox(height: 20 * scalingFactor,),
 
                     // IMAGE
                     Flexible(
