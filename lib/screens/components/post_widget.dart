@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
+import 'package:ratemy/application/entity/post.dart';
 import 'package:ratemy/screens/components/rate_button.dart';
 
 import '../presentation/feed_presentation.dart';
@@ -9,8 +10,9 @@ import 'grade_star.dart';
 
 class PostWidget extends StatefulWidget {
   final FeedPresentation presentation;
+  final Post post;
 
-  const PostWidget({super.key, required this.presentation});
+  const PostWidget({super.key, required this.presentation, required this.post});
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -18,26 +20,31 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   double rateButtonWidth = 0;
-  double bottomPositionRateBtn = 10;
+  double topPositionRateBtn = 0;
+  double bottomPositionRateBtn = 0;
   final double profileImageSize = 70;
   final List<String> previousImages = ['https://picsum.photos/id/${Random().nextInt(1000)}/800/800'];
   String imageUrl = '';
   bool loading = false;
   double currentGrade = -1;
-  final GlobalKey _toolContainerKey = GlobalKey();
+  final GlobalKey _imageKey = GlobalKey();
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
-      final Offset position = renderBox.localToGlobal(Offset.zero);
-      dev.log('Position obtained: ${position.dy}');
+      final RenderBox renderBox = _imageKey.currentContext!.findRenderObject() as RenderBox;
+      final iH = renderBox.size.height;
+      dev.log('Image height: $iH');
+      
+      final wH = _getHeight(context);
+      dev.log('Post widget height: $wH');
 
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
       dev.log('widget width = $rateButtonWidth', name: 'RATE BTN');
 
       setState(() {
-        bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
+        topPositionRateBtn = iH;
+        bottomPositionRateBtn = wH - topPositionRateBtn - 95;
       });
     });
     super.initState();
@@ -58,6 +65,7 @@ class _PostWidgetState extends State<PostWidget> {
 
             // IMAGE
             Flexible(
+              key: _imageKey,
               child: FractionallySizedBox(
                 child: Container(
                   width: sW,
@@ -72,7 +80,6 @@ class _PostWidgetState extends State<PostWidget> {
 
             // TOOLS BUTTONS
             Container(
-              key: _toolContainerKey,
               color: Colors.lightBlueAccent,
               height: 50,
               child: Center(
@@ -84,31 +91,36 @@ class _PostWidgetState extends State<PostWidget> {
             Container(
               color: Colors.red,
               height: 100,
-              child: Center(child: Text('Profile')),
+              child: Center(child: Text('Profile ${widget.post.user.name}')),
             ),
           ],
         ),
 
         // RATE BUTTON
         Positioned(
-          bottom: bottomPositionRateBtn,
+          // top: topPositionRateBtn,
+          bottom : bottomPositionRateBtn,
           right: 20,
           child: RateButton(
-              width: rateButtonWidth,
-              saveGrade: (grade) {
-            },
+            width: rateButtonWidth,
+            saveGrade: (grade) {},
           ),
         ),
 
 
         // CURRENT GRADE
-        const Positioned(
-            top: 130,
-            left: 15,
-            child: GradeStar(grade: 2, width: 70)
+        Positioned(
+            top: 30,
+            left: 10,
+            child: GradeStar(grade: widget.post.currentRating, width: 70)
         ),
       ],
     );
+  }
+
+  double _getHeight(BuildContext context) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    return renderBox.size.height;
   }
 
   Widget _buildToolsRow(double scalingFactor) {

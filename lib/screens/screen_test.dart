@@ -5,6 +5,8 @@ import 'package:ratemy/screens/components/bottom_bar.dart';
 import 'package:ratemy/screens/components/post_widget.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
+import '../application/entity/post.dart';
+
 
 class TestScreen extends StatefulWidget {
   final FeedPresentation presentation;
@@ -21,27 +23,32 @@ class _TestScreenState extends State<TestScreen> {
   final GlobalKey _toolContainerKey = GlobalKey();
   double rateButtonWidth = 0;
   double bottomPositionRateBtn = 100;
-
+  List<Post> posts = [];
 
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
-      final Offset position = renderBox.localToGlobal(Offset.zero);
-      log('Position obtained: ${position.dy}');
+      // final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
+      // final Offset position = renderBox.localToGlobal(Offset.zero);
+      // log('Position obtained: ${position.dy}');
 
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
       log('widget width = $rateButtonWidth', name: 'RATE BTN');
 
       setState(() {
-        bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
+        // bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
       });
     });
     super.initState();
   }
 
 
+  @override
+  void didChangeDependencies() {
+    posts = widget.presentation.getTestPosts();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,6 @@ class _TestScreenState extends State<TestScreen> {
                 color: Colors.green,
                 height: searchBarH,
                 child: Center(
-                  // child: Text('Search bar')
                   child: _buildTopSearchBar(),
                 ),
               ),
@@ -80,56 +86,17 @@ class _TestScreenState extends State<TestScreen> {
               Expanded(
                 child: PageView(
                   scrollDirection: Axis.vertical,
-                  children: [
-                    PostWidget(presentation: widget.presentation),
-                    PostWidget(presentation: widget.presentation),
-                    PostWidget(presentation: widget.presentation),
-                  ],
+                  children: posts.map((p) => PostWidget(presentation: widget.presentation, post: p)).toList(),
                 ),
               ),
 
               Container(
                 color: Colors.yellow,
                 height: bottomBarH,
-                // child: Center(
-                //     child: Text('Bottom bar: 80')
-                // ),
                 child: BottomBar(scaling: scalingFactor,),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-
-
-  Widget _buildToolsRow(double scalingFactor) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20.0, left: 10.0),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () {},
-            iconSize: 40 * scalingFactor,
-            icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
-
-          const SizedBox(width: 10,),
-
-          IconButton(
-            onPressed: () {},
-            iconSize: 40 * scalingFactor,
-            icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
-
-          const SizedBox(width: 10,),
-
-          IconButton(
-            onPressed: () {},
-            iconSize: 40 * scalingFactor,
-            icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
-
-          // const RateButton(),
         ],
       ),
     );
