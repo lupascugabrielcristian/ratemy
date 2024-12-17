@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:ratemy/application/entity/post.dart';

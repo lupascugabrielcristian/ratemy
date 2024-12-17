@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'dart:developer' as dev;
 
 import 'package:ratemy/application/entity/post.dart';
 import 'package:ratemy/screens/presentation/presentation.dart';
@@ -51,22 +52,60 @@ class PostsEffectiveList {
   final FeedPresentation presentation;
   List<Post> posts = [];
   List<Post> last = [];
+  var updateEndOfList = false;
 
-  PostsEffectiveList(this.presentation);
+  PostsEffectiveList(this.presentation, [this.posts = const []]);
   
+  int get length => posts.length;
   int get updatePoint => posts.length - 2;
   
-  Future<void> updateBeginning() {
-    return presentation.getRandomPosts(posts.length).then((posts) {
-      last = posts;
+  Post at(int index) {
+    return posts[index];
+  }
+  
+  bool _atUpdatePoint(int index) {
+    return index % posts.length == updatePoint;
+  }
 
-      for (int i = 0; i < posts.length - 2; i++) {
+  bool _atStartPoint(int index) {
+    return index % posts.length == 0;
+  }
+
+  Future<void> _updateBeginning() {
+    dev.log('Updating beginning of list');
+    return presentation.getRandomPosts(posts.length).then((posts) {
+      last = [...posts];
+
+      for (int i = 0; i < updatePoint; i++) {
         this.posts[i] = posts[i];
       }
+
+      dev.log('Done updating');
     });
   }
   
-  updateEnd() {
-    
+  _updateEnd() {
+    dev.log('Updating end of list');
+    for (int i = updatePoint; i < posts.length; i++) {
+      posts[i] = last[i];
+    }
+  }
+
+  void onPageChanged(int pageViewIndex) {
+    // After passing the index when updating the start of the list, need to update the end of the list
+    // When reaching the beginning of sequence, update the end of the list
+    if (_atStartPoint(pageViewIndex) && updateEndOfList) {
+      updateEndOfList = false;
+      _updateEnd();
+    }
+
+
+    // Get more elements when approaching the end
+    // When reaching the update point change the first half of effective list
+    // I also want to prevent updating twice without passing forward
+    if (_atUpdatePoint(pageViewIndex) && !updateEndOfList) {
+      updateEndOfList = true;
+      _updateBeginning();
+    }
   }
 }

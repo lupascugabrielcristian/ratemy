@@ -5,7 +5,6 @@ import 'package:ratemy/screens/components/bottom_bar.dart';
 import 'package:ratemy/screens/components/post_widget.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
-import '../application/entity/post.dart';
 
 
 class TestScreen extends StatefulWidget {
@@ -23,19 +22,21 @@ class _TestScreenState extends State<TestScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   double rateButtonWidth = 0;
   double bottomPositionRateBtn = 100;
-  List<Post> _posts = [];
-  bool updateEndOfList = true;
+  // List<Post> _posts = [];
+  late PostsEffectiveList _posts;
+  bool updateEndOfList = false;
 
 
   @override
   void initState() {
+    _posts = PostsEffectiveList(widget.presentation, widget.presentation.getTestPosts());
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
       // final Offset position = renderBox.localToGlobal(Offset.zero);
       // log('Position obtained: ${position.dy}');
 
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
-      log('widget width = $rateButtonWidth', name: 'RATE BTN');
 
       setState(() {
         // bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
@@ -47,7 +48,7 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   void didChangeDependencies() {
-    _posts = widget.presentation.getTestPosts();
+    // _posts = widget.presentation.getTestPosts();
     super.didChangeDependencies();
   }
 
@@ -82,34 +83,13 @@ class _TestScreenState extends State<TestScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   scrollDirection: Axis.vertical,
-                  onPageChanged: (int index) async {
-                    // After passing the index when updating the start of the list, need to update the end of the list
-                    if (updateEndOfList) {
-                      updateEndOfList = false;
-                    }
-
-
-                    // Get more elements when approaching the end
-                    // Update elements at index 0 -> index - 1
-                    // When reaching the last element, change the first half of effective list
-                    if (index % _posts.length == _posts.length - 2) {
-                      log('Updating list at index $index');
-                      updateEndOfList = true;
-                      // compute(_updateEffectiveList, (_posts.length / 2).round()).then((res) {
-                      //   log('Compute completed with $res');
-                      // });
-                      widget.presentation.getRandomPosts((_posts.length - 1).round()).then((posts) {
-                        for (int i = 0; i < posts.length - 2; i++) {
-                          _posts[i] = posts[i];
-                        }
-                        log('Done updating');
-                      });
-                    }
+                  onPageChanged: (int index) {
+                    _posts.onPageChanged(index);
                   },
                   itemBuilder: (context, index) {
                     final effectiveIndex = index % _posts.length;
                     log('showing post at index $effectiveIndex');
-                    return PostWidget(presentation: widget.presentation, post: _posts[effectiveIndex]);
+                    return PostWidget(presentation: widget.presentation, post: _posts.at(effectiveIndex));
                   },
                 ),
               ),
