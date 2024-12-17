@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/components/bottom_bar.dart';
-import 'package:ratemy/screens/components/post_widget.dart';
+import 'package:ratemy/screens/components/test_post_widget.dart';
 import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 
@@ -22,7 +22,6 @@ class _TestScreenState extends State<TestScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   double rateButtonWidth = 0;
   double bottomPositionRateBtn = 100;
-  // List<Post> _posts = [];
   late PostsEffectiveList _posts;
   bool updateEndOfList = false;
 
@@ -32,15 +31,7 @@ class _TestScreenState extends State<TestScreen> {
     _posts = PostsEffectiveList(widget.presentation, widget.presentation.getTestPosts());
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // final RenderBox renderBox = _toolContainerKey.currentContext!.findRenderObject() as RenderBox;
-      // final Offset position = renderBox.localToGlobal(Offset.zero);
-      // log('Position obtained: ${position.dy}');
-
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
-
-      setState(() {
-        // bottomPositionRateBtn = MediaQuery.sizeOf(context).height - position.dy - rateButtonWidth;
-      });
     });
     super.initState();
   }
@@ -48,7 +39,6 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   void didChangeDependencies() {
-    // _posts = widget.presentation.getTestPosts();
     super.didChangeDependencies();
   }
 
@@ -89,7 +79,7 @@ class _TestScreenState extends State<TestScreen> {
                   itemBuilder: (context, index) {
                     final effectiveIndex = index % _posts.length;
                     log('showing post at index $effectiveIndex');
-                    return PostWidget(presentation: widget.presentation, post: _posts.at(effectiveIndex));
+                    return TestPostWidget(presentation: widget.presentation, post: _posts.at(effectiveIndex));
                   },
                 ),
               ),

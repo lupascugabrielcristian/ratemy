@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(presentation: injector.getLoginPresentation()),
         UserScreen.id: (context) => UserScreen(presentation: injector.getProfilePresentation(),),
         ProfileScreen.id: (context) => ProfileScreen(presentation: injector.getProfilePresentation(),),
-        TestScreen.id: (context) => TestScreen(presentation: injector.getFeedPresentation(),),
+        FeedScreen.id: (context) => FeedScreen(presentation: injector.getFeedPresentation(),),
       },
       theme: AppTheme.getAppTheme(),
       onGenerateRoute: (settings) {
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         if(settings.name == FeedScreen.id) {
           const user = User(name: 'Andrei', profileImage: 'assets/example_profile_image.jpeg');
           return MaterialPageRoute(builder: (context) {
-            return FeedScreen(presentation: injector.getFeedPresentation(), user: user,);
+            return FeedScreen(presentation: injector.getFeedPresentation(),);
           });
         }
 

@@ -7,17 +7,17 @@ import 'package:ratemy/screens/components/rate_button.dart';
 import '../presentation/feed_presentation.dart';
 import 'grade_star.dart';
 
-class PostWidget extends StatefulWidget {
+class TestPostWidget extends StatefulWidget {
   final FeedPresentation presentation;
   final Post post;
 
-  const PostWidget({super.key, required this.presentation, required this.post});
+  const TestPostWidget({super.key, required this.presentation, required this.post});
 
   @override
-  State<PostWidget> createState() => _PostWidgetState();
+  State<TestPostWidget> createState() => _TestPostWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _TestPostWidgetState extends State<TestPostWidget> {
   double rateButtonWidth = 0;
   double topPositionRateBtn = 0;
   double bottomPositionRateBtn = 0;
@@ -63,10 +63,11 @@ class _PostWidgetState extends State<PostWidget> {
             Flexible(
               key: _imageKey,
               child: FractionallySizedBox(
-                child: SizedBox(
+                child: Container(
                   width: sW,
-                  height: sW * 1.2,
-                  child: _buildImage(widget.post.imageUrl),
+                  height: sW,
+                  color: Colors.blue,
+                  child: const Center(child: Text('Image')),
                 ),
               ),
             ),
@@ -74,7 +75,8 @@ class _PostWidgetState extends State<PostWidget> {
             SizedBox(height: 20 * scalingFactor,),
 
             // TOOLS BUTTONS
-            SizedBox(
+            Container(
+              color: Colors.lightBlueAccent,
               height: 50,
               child: Center(
                 child: _buildToolsRow(scalingFactor - 0.2),
@@ -82,15 +84,17 @@ class _PostWidgetState extends State<PostWidget> {
             ),
 
             // PROFILE IMAGE
-            SizedBox(
+            Container(
+              color: Colors.red,
               height: 100,
-              child: _buildProfileRow(profileImageSize),
+              child: Center(child: Text('Profile ${widget.post.user.name}')),
             ),
           ],
         ),
 
         // RATE BUTTON
         Positioned(
+          // top: topPositionRateBtn,
           bottom : bottomPositionRateBtn,
           right: 20,
           child: RateButton(
@@ -107,31 +111,6 @@ class _PostWidgetState extends State<PostWidget> {
             child: GradeStar(grade: widget.post.currentRating, width: 70)
         ),
       ],
-    );
-  }
-
-  Widget _buildImage(String src) {
-    return Image.network(
-        src,
-        gaplessPlayback: true,
-        errorBuilder: _onError,
-        fit: BoxFit.cover,
-      );
-  }
-
-  Widget _onError(BuildContext context, Object error, StackTrace? stackTrace) {
-    double w = MediaQuery.sizeOf(context).width;
-    return Container(
-      color: widget.presentation.secondary,
-      height: w,
-      width: w,
-      child: Center(
-        child: Icon(
-          Icons.broken_image,
-          color: widget.presentation.primary,
-          size: 50,
-        ),
-      ),
     );
   }
 
@@ -165,24 +144,6 @@ class _PostWidgetState extends State<PostWidget> {
             icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
 
           // const RateButton(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileRow(double profileImageSize) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20.0, left: 20.0),
-      child: Row(
-        children: [
-          Image.asset(
-            alignment: Alignment.centerLeft,
-            widget.post.user.profileImage,
-            width: profileImageSize,
-            height: profileImageSize,
-          ),
-          const SizedBox(width: 10),
-          Text(widget.post.user.name, style: const TextStyle(color: Color.fromARGB(255, 225, 225, 225), fontSize: 18,))
         ],
       ),
     );

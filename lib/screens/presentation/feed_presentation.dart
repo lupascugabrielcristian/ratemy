@@ -18,12 +18,12 @@ class FeedPresentation extends Presentation {
     User u3 = const User(name: 'Marian', profileImage: 'assets/example_profile_image.jpeg');
 
     return [
-      Post(u1, 5.9, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400'),
-      Post(u2, 8.2, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400'),
-      Post(u3, 7.5, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400'),
-      Post(u1, 3.5, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400'),
-      Post(u2, 6.8, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400'),
-      Post(u3, 4.8, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400'),
+      Post(u1, 5.9, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/400/800'),
+      Post(u2, 8.2, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/400/800'),
+      Post(u3, 7.5, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/400/800'),
+      Post(u1, 3.5, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/400/800'),
+      Post(u2, 6.8, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/400/800'),
+      Post(u3, 4.8, 0, 'https://picsum.photos/id/${Random().nextInt(1000)}/400/800'),
     ];
   }
 
