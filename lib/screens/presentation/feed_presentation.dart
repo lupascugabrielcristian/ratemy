@@ -48,6 +48,17 @@ class FeedPresentation extends Presentation {
   }
 }
 
+class PostView {
+  final String image;
+  double pictureRating;
+  int userRating;
+
+  PostView(Post post):
+    image = post.imageUrl,
+    pictureRating = post.pictureRating,
+    userRating = post.userRating;
+}
+
 class PostsEffectiveList {
   final FeedPresentation presentation;
   List<Post> posts = [];

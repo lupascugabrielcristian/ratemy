@@ -1,13 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ratemy/screens/presentation/feed_presentation.dart';
 
 class RateButton extends StatefulWidget {
-  const RateButton({super.key, required this.saveGrade, required this.width});
+  const RateButton({super.key, required this.presentation, required this.saveGrade, required this.width, this.userRating = 0, });
 
+  final FeedPresentation presentation;
   final Function(int) saveGrade;
   final double width;
+  final int userRating;
 
   @override
   State<RateButton> createState() => _RateButtonState();
@@ -41,9 +42,9 @@ class _RateButtonState extends State<RateButton> {
         });
       },
       onVerticalDragUpdate: (details) {
-        final renderBox = _rateContainerKey.currentContext!.findRenderObject() as RenderBox;
-
-        log('Cursor Y=${details.localPosition.dy} in box height ${renderBox.size.height}', name: 'RATE BAR');
+        // final renderBox = _rateContainerKey.currentContext!.findRenderObject() as RenderBox;
+        //
+        // log('Cursor Y=${details.localPosition.dy} in box height ${renderBox.size.height}', name: 'RATE BAR');
 
         setState(() {
           selectedGrade = 0;
@@ -88,10 +89,7 @@ class _RateButtonState extends State<RateButton> {
         child: Column(
           children: [
             _grades(widget.width),
-            SvgPicture.asset(
-              width: widget.width,
-              'assets/rate_btn.svg'
-            ),
+            _rateBtn(),
           ],
         ),
       ),
@@ -131,5 +129,25 @@ class _RateButtonState extends State<RateButton> {
       ),
       child: Center(child: Text(no.toString(), style: const TextStyle(fontSize: 20, color: Colors.black),)),
     );
+  }
+
+  Widget _rateBtn() {
+    if (widget.userRating > 0) {
+      return Container(
+        width: widget.width,
+        height: widget.width,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+            child: Text(widget.userRating.toString(), style: widget.presentation.rateBtnStyle)),
+      );
+    } else {
+      return SvgPicture.asset(
+          width: widget.width,
+          'assets/rate_btn.svg'
+      );
+    }
   }
 }

@@ -27,9 +27,13 @@ class _PostWidgetState extends State<PostWidget> {
   bool loading = false;
   double currentGrade = -1;
   final GlobalKey _imageKey = GlobalKey();
+  late PostView post;
 
   @override
   void initState() {
+    // This should be used instead of widget.post
+    post = PostView(widget.post);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = _imageKey.currentContext!.findRenderObject() as RenderBox;
       final iH = renderBox.size.height;
@@ -94,17 +98,27 @@ class _PostWidgetState extends State<PostWidget> {
           bottom : bottomPositionRateBtn,
           right: 20,
           child: RateButton(
+            presentation: widget.presentation,
             width: rateButtonWidth,
-            saveGrade: (grade) {},
+            userRating: post.userRating,
+            saveGrade: (grade) {
+              setState(() {
+                final updatedPictureRating = (widget.post.pictureRating * 10 + grade) / 11;
+                setState(() {
+                  post.pictureRating = (10 * updatedPictureRating).round() / 10;
+                  post.userRating = grade;
+                });
+              });
+            },
           ),
         ),
 
 
-        // CURRENT GRADE
+        // PICTURE RATING
         Positioned(
             top: 30,
             left: 10,
-            child: GradeStar(grade: widget.post.currentRating, width: 70)
+            child: GradeStar(grade: post.pictureRating, width: 70)
         ),
       ],
     );

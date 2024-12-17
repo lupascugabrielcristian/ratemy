@@ -98,6 +98,7 @@ class _TestPostWidgetState extends State<TestPostWidget> {
           bottom : bottomPositionRateBtn,
           right: 20,
           child: RateButton(
+            presentation: widget.presentation,
             width: rateButtonWidth,
             saveGrade: (grade) {},
           ),
@@ -108,7 +109,7 @@ class _TestPostWidgetState extends State<TestPostWidget> {
         Positioned(
             top: 30,
             left: 10,
-            child: GradeStar(grade: widget.post.currentRating, width: 70)
+            child: GradeStar(grade: widget.post.pictureRating, width: 70)
         ),
       ],
     );

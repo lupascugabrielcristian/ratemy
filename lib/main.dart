@@ -5,10 +5,8 @@ import 'package:ratemy/screens/profile_screen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
 import 'package:ratemy/screens/login_screen.dart';
 import 'package:ratemy/screens/presentation/app_theme.dart';
-import 'package:ratemy/screens/screen_test.dart';
 import 'package:ratemy/screens/user_screen.dart';
 
-import 'application/entity/user.dart';
 import 'application/injector.dart';
 
 void main() {
@@ -42,7 +40,6 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         // All Routes definitions that require parameters
         if(settings.name == FeedScreen.id) {
-          const user = User(name: 'Andrei', profileImage: 'assets/example_profile_image.jpeg');
           return MaterialPageRoute(builder: (context) {
             return FeedScreen(presentation: injector.getFeedPresentation(),);
           });
