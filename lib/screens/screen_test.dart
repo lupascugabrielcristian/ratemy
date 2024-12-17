@@ -20,10 +20,10 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  final GlobalKey _toolContainerKey = GlobalKey();
+  final PageController _pageController = PageController(initialPage: 0);
   double rateButtonWidth = 0;
   double bottomPositionRateBtn = 100;
-  List<Post> posts = [];
+  List<Post> _posts = [];
 
 
   @override
@@ -46,7 +46,7 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   void didChangeDependencies() {
-    posts = widget.presentation.getTestPosts();
+    _posts = widget.presentation.getTestPosts();
     super.didChangeDependencies();
   }
 
@@ -80,13 +80,19 @@ class _TestScreenState extends State<TestScreen> {
                 ),
               ),
 
-              // Expanded(
-              //   child: PostWidget(presentation: widget.presentation),
-              // ),
               Expanded(
-                child: PageView(
+                child: PageView.builder(
+                  controller: _pageController,
                   scrollDirection: Axis.vertical,
-                  children: posts.map((p) => PostWidget(presentation: widget.presentation, post: p)).toList(),
+                  onPageChanged: (int index) {
+                    // Get more elements when approaching the end
+                    // Update elements at index 0 -> index - 1
+                  },
+                  itemBuilder: (context, index) {
+                    final effectiveIndex = index % _posts.length;
+                    log('showing post at index $effectiveIndex');
+                    return PostWidget(presentation: widget.presentation, post: _posts[effectiveIndex]);
+                  },
                 ),
               ),
 

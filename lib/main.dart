@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
           return LoginScreen(presentation: injector.getLoginPresentation());
         });
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
