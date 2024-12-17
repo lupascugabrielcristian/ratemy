@@ -24,6 +24,7 @@ class _TestScreenState extends State<TestScreen> {
   double rateButtonWidth = 0;
   double bottomPositionRateBtn = 100;
   List<Post> _posts = [];
+  bool updateEndOfList = true;
 
 
   @override
@@ -54,12 +55,9 @@ class _TestScreenState extends State<TestScreen> {
   Widget build(BuildContext context) {
     final sW = MediaQuery.sizeOf(context).width;
     final sH = MediaQuery.sizeOf(context).height;
-    log('sH = $sH', name: 'TEST');
     final double searchBarH = sW * .2 > 50 ? 50 : sW * .2;
     final double bottomBarH = sW * .3 > 60 ? 60 : sW * .3;
-    log('bottomBarH = $bottomBarH', name: 'TEST');
     final double scalingFactor = sH > 700 ? 1 : sH / 700;
-    log('scaling factor = $scalingFactor', name: 'TEST');
 
 
     return Scaffold(
@@ -84,9 +82,29 @@ class _TestScreenState extends State<TestScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   scrollDirection: Axis.vertical,
-                  onPageChanged: (int index) {
+                  onPageChanged: (int index) async {
+                    // After passing the index when updating the start of the list, need to update the end of the list
+                    if (updateEndOfList) {
+                      updateEndOfList = false;
+                    }
+
+
                     // Get more elements when approaching the end
                     // Update elements at index 0 -> index - 1
+                    // When reaching the last element, change the first half of effective list
+                    if (index % _posts.length == _posts.length - 2) {
+                      log('Updating list at index $index');
+                      updateEndOfList = true;
+                      // compute(_updateEffectiveList, (_posts.length / 2).round()).then((res) {
+                      //   log('Compute completed with $res');
+                      // });
+                      widget.presentation.getRandomPosts((_posts.length - 1).round()).then((posts) {
+                        for (int i = 0; i < posts.length - 2; i++) {
+                          _posts[i] = posts[i];
+                        }
+                        log('Done updating');
+                      });
+                    }
                   },
                   itemBuilder: (context, index) {
                     final effectiveIndex = index % _posts.length;

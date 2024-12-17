@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ratemy/screens/presentation/login_presentation.dart';
 import 'package:ratemy/screens/screen_test.dart';
 
-import 'feed_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {

@@ -34,13 +34,10 @@ class _PostWidgetState extends State<PostWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox renderBox = _imageKey.currentContext!.findRenderObject() as RenderBox;
       final iH = renderBox.size.height;
-      dev.log('Image height: $iH');
-      
+
       final wH = _getHeight(context);
-      dev.log('Post widget height: $wH');
 
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
-      dev.log('widget width = $rateButtonWidth', name: 'RATE BTN');
 
       setState(() {
         topPositionRateBtn = iH;
@@ -71,7 +68,7 @@ class _PostWidgetState extends State<PostWidget> {
                   width: sW,
                   height: sW,
                   color: Colors.blue,
-                  child: Center(child: Text('Image')),
+                  child: const Center(child: Text('Image')),
                 ),
               ),
             ),

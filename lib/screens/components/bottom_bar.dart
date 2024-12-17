@@ -12,16 +12,16 @@ class BottomBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _build_button_1(),
-        _build_calendar_button(),
-        _build_button_3(),
-        _build_notifications_button(),
-        _build_profile_button(),
+        _buildButton(),
+        _buildCalendarButton(),
+        _buildButton3(),
+        _buildNotificationsButton(),
+        _buildProfileButton(),
       ],
     );
   }
 
-  _build_button_1() {
+  _buildButton() {
     return IconButton(
         onPressed: () {},
         iconSize: iconSize * scaling,
@@ -29,28 +29,28 @@ class BottomBar extends StatelessWidget {
   }
 
 
-  _build_calendar_button() {
+  _buildCalendarButton() {
     return IconButton(
       onPressed: () {},
       iconSize: iconSize * scaling,
       icon: const Icon(Icons.calendar_month), color: iconColor);
   }
 
-  _build_button_3() {
+  _buildButton3() {
     return IconButton(
         onPressed: () {},
         iconSize: iconSize * scaling,
         icon: const Icon(Icons.outbox_outlined), color: iconColor);
   }
 
-  _build_notifications_button() {
+  _buildNotificationsButton() {
     return IconButton(
         onPressed: () {},
         iconSize: iconSize * scaling,
         icon: const Icon(Icons.notifications), color: iconColor);
   }
 
-  _build_profile_button() {
+  _buildProfileButton() {
     return IconButton(
         onPressed: () {},
         iconSize: iconSize * scaling,
