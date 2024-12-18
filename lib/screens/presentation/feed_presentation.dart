@@ -69,7 +69,15 @@ class PostsEffectiveList {
   
   int get length => posts.length;
   int get updatePoint => posts.length - 2;
-  
+
+  String nextImage(int currentIndex) {
+    if (posts.length > currentIndex + 1) {
+      return posts[currentIndex + 1].imageUrl;
+    } else {
+      return posts[0].imageUrl;
+    }
+  }
+
   Post at(int index) {
     return posts[index];
   }

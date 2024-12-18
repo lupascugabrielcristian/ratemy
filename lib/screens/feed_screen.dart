@@ -28,6 +28,8 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     _posts = PostsEffectiveList(widget.presentation, widget.presentation.getTestPosts());
 
+    // precacheImage(NetworkImage(_posts.at(0).imageUrl), context);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
     });
@@ -66,6 +68,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   scrollDirection: Axis.vertical,
                   onPageChanged: (int index) {
                     _posts.onPageChanged(index);
+                    precacheImage(NetworkImage(_posts.nextImage(index)), context);
                   },
                   itemBuilder: (context, index) {
                     final effectiveIndex = index % _posts.length;
