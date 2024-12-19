@@ -28,8 +28,6 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     _posts = PostsEffectiveList(widget.presentation, widget.presentation.getTestPosts());
 
-    // precacheImage(NetworkImage(_posts.at(0).imageUrl), context);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       rateButtonWidth = MediaQuery.sizeOf(context).width * .13;
     });

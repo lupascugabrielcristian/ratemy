@@ -42,7 +42,7 @@ class FeedPresentation extends Presentation {
   Post _getRandomPost(String name) {
     final user = User(name: name, profileImage: 'assets/example_profile_image.jpeg');
     final pictureRating = (100 * Random().nextDouble()).round() / 10;
-    final userRating = Random().nextInt(5);
+    const userRating = 0;
 
     return Post(user, pictureRating, userRating, 'https://picsum.photos/id/${Random().nextInt(1000)}/800/400');
   }
